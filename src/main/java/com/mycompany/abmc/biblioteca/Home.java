@@ -30,7 +30,6 @@ public class Home extends javax.swing.JFrame {
         Title.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         Title.setText("Biblioteca");
 
-        SeeBooksButton.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         SeeBooksButton.setForeground(new java.awt.Color(8, 8, 8));
         SeeBooksButton.setText("Ver libros");
         SeeBooksButton.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -55,15 +54,15 @@ public class Home extends javax.swing.JFrame {
                 .addGap(24, 24, 24)
                 .addComponent(Title)
                 .addGap(24, 24, 24)
-                .addComponent(SeeBooksButton, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(24, Short.MAX_VALUE))
+                .addComponent(SeeBooksButton, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(30, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void SeeBooksButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SeeBooksButtonMouseClicked
-        new AddBook().setVisible(true);
+        new BooksListForm().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_SeeBooksButtonMouseClicked
 
