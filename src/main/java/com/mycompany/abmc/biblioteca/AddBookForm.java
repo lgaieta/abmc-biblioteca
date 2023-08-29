@@ -29,6 +29,8 @@ public class AddBookForm extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         ButtonAdd = new javax.swing.JButton();
         GoBackButton = new javax.swing.JButton();
+        FieldDescription = new javax.swing.JTextField();
+        DescriptionLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Añadir nuevo libro");
@@ -60,31 +62,35 @@ public class AddBookForm extends javax.swing.JFrame {
             }
         });
 
+        FieldDescription.setHorizontalAlignment(javax.swing.JTextField.LEFT);
+
+        DescriptionLabel.setText("Descripción");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(24, 24, 24)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(134, 134, 134)
-                        .addComponent(ButtonAdd, javax.swing.GroupLayout.DEFAULT_SIZE, 94, Short.MAX_VALUE)
-                        .addGap(148, 148, 148))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(GoBackButton)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(GoBackButton)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(Title, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(FieldName, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(jLabel1))
-                                .addGap(32, 32, 32)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel2)
-                                    .addComponent(FieldAuthor, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addContainerGap(24, Short.MAX_VALUE))))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(Title, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(FieldName, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel1)
+                            .addComponent(DescriptionLabel))
+                        .addGap(32, 32, 32)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(FieldAuthor, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(FieldDescription, javax.swing.GroupLayout.Alignment.LEADING))
+                .addGap(24, 24, 24))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(157, 157, 157)
+                .addComponent(ButtonAdd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(157, 157, 157))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -101,6 +107,10 @@ public class AddBookForm extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(FieldName, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(FieldAuthor, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(16, 16, 16)
+                .addComponent(DescriptionLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(FieldDescription, javax.swing.GroupLayout.DEFAULT_SIZE, 29, Short.MAX_VALUE)
                 .addGap(24, 24, 24)
                 .addComponent(ButtonAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(24, Short.MAX_VALUE))
@@ -112,8 +122,9 @@ public class AddBookForm extends javax.swing.JFrame {
     private void ButtonAddMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ButtonAddMouseClicked
         String name = FieldName.getText();
         String author = FieldAuthor.getText();
+        String description = FieldDescription.getText();
 
-        String query = "INSERT INTO libro (nombre, autor) VALUES (?, ?)";
+        String query = "INSERT INTO libro (nombre, autor, descripcion) VALUES (?, ?, ?)";
 
         DBConnection db = new DBConnection();
         db.open();
@@ -122,6 +133,7 @@ public class AddBookForm extends javax.swing.JFrame {
             PreparedStatement statement = db.connection.prepareStatement(query);
             statement.setString(1, name);
             statement.setString(2, author);
+            statement.setString(3, description);
             statement.execute();
             JOptionPane.showMessageDialog(null, "Libro añadido correctamente!");
             this.dispose();
@@ -180,7 +192,9 @@ public class AddBookForm extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ButtonAdd;
+    private javax.swing.JLabel DescriptionLabel;
     private javax.swing.JTextField FieldAuthor;
+    private javax.swing.JTextField FieldDescription;
     private javax.swing.JTextField FieldName;
     private javax.swing.JButton GoBackButton;
     private javax.swing.JLabel Title;

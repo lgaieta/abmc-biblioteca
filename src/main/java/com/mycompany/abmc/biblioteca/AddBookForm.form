@@ -30,33 +30,31 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
               <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace min="-2" pref="134" max="-2" attributes="0"/>
-                      <Component id="ButtonAdd" pref="94" max="32767" attributes="0"/>
-                      <EmptySpace min="-2" pref="148" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <Group type="103" groupAlignment="1" attributes="0">
-                          <Component id="GoBackButton" min="-2" max="-2" attributes="0"/>
-                          <Group type="102" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="103" alignment="0" groupAlignment="0" max="-2" attributes="0">
-                                      <Component id="Title" max="32767" attributes="0"/>
-                                      <Component id="FieldName" min="-2" pref="160" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
-                                  <Component id="FieldAuthor" min="-2" pref="160" max="-2" attributes="0"/>
-                              </Group>
+              <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                  <Component id="GoBackButton" min="-2" max="-2" attributes="0"/>
+                  <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="103" alignment="0" groupAlignment="0" max="-2" attributes="0">
+                              <Component id="Title" max="32767" attributes="0"/>
+                              <Component id="FieldName" min="-2" pref="160" max="-2" attributes="0"/>
                           </Group>
+                          <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="DescriptionLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="24" max="32767" attributes="0"/>
+                      <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
+                          <Component id="FieldAuthor" min="-2" pref="160" max="-2" attributes="0"/>
+                      </Group>
                   </Group>
+                  <Component id="FieldDescription" alignment="0" max="32767" attributes="0"/>
               </Group>
+              <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
+          </Group>
+          <Group type="102" alignment="1" attributes="0">
+              <EmptySpace min="-2" pref="157" max="-2" attributes="0"/>
+              <Component id="ButtonAdd" max="32767" attributes="0"/>
+              <EmptySpace min="-2" pref="157" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -73,11 +71,15 @@
                   <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="FieldName" alignment="3" min="-2" pref="28" max="-2" attributes="0"/>
                   <Component id="FieldAuthor" alignment="3" min="-2" pref="28" max="-2" attributes="0"/>
               </Group>
+              <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
+              <Component id="DescriptionLabel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <Component id="FieldDescription" pref="29" max="32767" attributes="0"/>
               <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
               <Component id="ButtonAdd" min="-2" pref="32" max="-2" attributes="0"/>
               <EmptySpace pref="24" max="32767" attributes="0"/>
@@ -133,6 +135,16 @@
       <Events>
         <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="GoBackButtonMouseClicked"/>
       </Events>
+    </Component>
+    <Component class="javax.swing.JTextField" name="FieldDescription">
+      <Properties>
+        <Property name="horizontalAlignment" type="int" value="2"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="DescriptionLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Descripci&#xf3;n"/>
+      </Properties>
     </Component>
   </SubComponents>
 </Form>

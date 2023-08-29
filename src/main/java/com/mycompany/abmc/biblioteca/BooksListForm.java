@@ -8,6 +8,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -16,16 +18,18 @@ import javax.swing.table.DefaultTableModel;
  */
 public class BooksListForm extends javax.swing.JFrame {
 
+    DBConnection db = null;
+    DefaultTableModel tableModel = new DefaultTableModel();
+
     /**
      * Creates new form BooksList
      */
     public BooksListForm() {
         initComponents();
 
-        DefaultTableModel tableModel = new DefaultTableModel();
         BooksTable.setModel(tableModel);
 
-        DBConnection db = new DBConnection();
+        db = new DBConnection();
         db.open();
 
         String query = "SELECT * FROM libro";
@@ -40,6 +44,7 @@ public class BooksListForm extends javax.swing.JFrame {
             tableModel.addColumn("N° Libro");
             tableModel.addColumn("Nombre");
             tableModel.addColumn("Autor");
+            tableModel.addColumn("Descripción");
 
             while (result.next()) {
                 Object[] filas = new Object[numberOfColumns];
@@ -68,9 +73,12 @@ public class BooksListForm extends javax.swing.JFrame {
         BooksTable = new javax.swing.JTable();
         Title = new javax.swing.JLabel();
         NewBookButton = new javax.swing.JButton();
+        SearchTextField = new javax.swing.JTextField();
+        SearchButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        BooksTable.setForeground(new java.awt.Color(8, 8, 8));
         BooksTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -96,19 +104,43 @@ public class BooksListForm extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(BooksTable);
 
-        Title.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        Title.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         Title.setForeground(new java.awt.Color(8, 8, 8));
         Title.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        Title.setText("Libros");
+        Title.setText("Lista de libros - Biblioteca E.E.S.T. N°1");
 
         NewBookButton.setBackground(new java.awt.Color(0, 0, 153));
         NewBookButton.setForeground(new java.awt.Color(255, 255, 255));
         NewBookButton.setText("Nuevo Libro");
         NewBookButton.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        NewBookButton.setMargin(new java.awt.Insets(3, 14, 3, 14));
+        NewBookButton.setMargin(new java.awt.Insets(3, 6, 3, 6));
+        NewBookButton.setMaximumSize(new java.awt.Dimension(113, 32));
+        NewBookButton.setMinimumSize(new java.awt.Dimension(113, 32));
+        NewBookButton.setPreferredSize(new java.awt.Dimension(95, 32));
         NewBookButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 NewBookButtonMouseClicked(evt);
+            }
+        });
+
+        SearchTextField.setForeground(new java.awt.Color(8, 8, 8));
+        SearchTextField.setHorizontalAlignment(javax.swing.JTextField.LEFT);
+        SearchTextField.setToolTipText("Buscar por nombre");
+        SearchTextField.setMinimumSize(new java.awt.Dimension(178, 32));
+        SearchTextField.setName(""); // NOI18N
+        SearchTextField.setPreferredSize(new java.awt.Dimension(178, 32));
+
+        SearchButton.setForeground(new java.awt.Color(8, 8, 8));
+        SearchButton.setText("Buscar");
+        SearchButton.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        SearchButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        SearchButton.setMaximumSize(new java.awt.Dimension(77, 32));
+        SearchButton.setMinimumSize(new java.awt.Dimension(77, 32));
+        SearchButton.setName(""); // NOI18N
+        SearchButton.setPreferredSize(new java.awt.Dimension(77, 32));
+        SearchButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                SearchButtonMouseClicked(evt);
             }
         });
 
@@ -117,15 +149,16 @@ public class BooksListForm extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(24, 24, 24)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 586, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addContainerGap(368, Short.MAX_VALUE)
-                        .addComponent(NewBookButton))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(24, 24, 24)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 439, Short.MAX_VALUE)
-                            .addComponent(Title, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(SearchTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(16, 16, 16)
+                        .addComponent(SearchButton, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(NewBookButton, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(Title, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(24, 24, 24))
         );
         layout.setVerticalGroup(
@@ -134,11 +167,16 @@ public class BooksListForm extends javax.swing.JFrame {
                 .addGap(24, 24, 24)
                 .addComponent(Title)
                 .addGap(24, 24, 24)
-                .addComponent(NewBookButton, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(NewBookButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(SearchTextField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(SearchButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(16, 16, 16)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 224, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)
                 .addGap(24, 24, 24))
         );
+
+        SearchTextField.getAccessibleContext().setAccessibleName("");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -147,6 +185,37 @@ public class BooksListForm extends javax.swing.JFrame {
         new AddBookForm().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_NewBookButtonMouseClicked
+
+    private void SearchButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SearchButtonMouseClicked
+        String name = SearchTextField.getText();
+
+        String query = "SELECT * FROM libro WHERE nombre LIKE ?";
+
+        try {
+            PreparedStatement statement = db.connection.prepareStatement(query);
+            statement.setString(1, "%" + name + "%");
+
+            System.out.println(statement);
+
+            ResultSet result = statement.executeQuery();
+            ResultSetMetaData resultMetaData = result.getMetaData();
+            int numberOfColumns = resultMetaData.getColumnCount();
+
+            tableModel.setRowCount(0);
+
+            while (result.next()) {
+                Object[] filas = new Object[numberOfColumns];
+
+                for (int i = 0; i < numberOfColumns; i++) {
+                    filas[i] = result.getObject(i + 1);
+                }
+
+                tableModel.addRow(filas);
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        }
+    }//GEN-LAST:event_SearchButtonMouseClicked
 
     /**
      * @param args the command line arguments
@@ -187,6 +256,8 @@ public class BooksListForm extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable BooksTable;
     private javax.swing.JButton NewBookButton;
+    private javax.swing.JButton SearchButton;
+    private javax.swing.JTextField SearchTextField;
     private javax.swing.JLabel Title;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
