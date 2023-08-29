@@ -43,7 +43,19 @@ public class AddBookForm extends javax.swing.JFrame {
         Title.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         Title.setText("Añadir nuevo libro");
 
+        FieldName.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                FieldNameKeyPressed(evt);
+            }
+        });
+
         jLabel1.setText("Nombre");
+
+        FieldAuthor.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                FieldAuthorKeyPressed(evt);
+            }
+        });
 
         jLabel2.setText("Autor");
 
@@ -64,6 +76,11 @@ public class AddBookForm extends javax.swing.JFrame {
         });
 
         FieldDescription.setHorizontalAlignment(javax.swing.JTextField.LEFT);
+        FieldDescription.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                FieldDescriptionKeyPressed(evt);
+            }
+        });
 
         DescriptionLabel.setText("Descripción");
 
@@ -120,7 +137,7 @@ public class AddBookForm extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void ButtonAddMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ButtonAddMouseClicked
+    void addBook() {
         String name = FieldName.getText();
         String author = FieldAuthor.getText();
         String description = FieldDescription.getText();
@@ -142,12 +159,34 @@ public class AddBookForm extends javax.swing.JFrame {
         } catch (SQLException ex) {
             System.out.println(ex);
         }
+    }
+    
+    private void ButtonAddMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ButtonAddMouseClicked
+        addBook();
     }//GEN-LAST:event_ButtonAddMouseClicked
 
     private void GoBackButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_GoBackButtonMouseClicked
         this.dispose();
         new BooksListForm().setVisible(true);
     }//GEN-LAST:event_GoBackButtonMouseClicked
+
+    private void FieldNameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_FieldNameKeyPressed
+        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+            addBook();
+        }
+    }//GEN-LAST:event_FieldNameKeyPressed
+
+    private void FieldAuthorKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_FieldAuthorKeyPressed
+        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+            addBook();
+        }
+    }//GEN-LAST:event_FieldAuthorKeyPressed
+
+    private void FieldDescriptionKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_FieldDescriptionKeyPressed
+        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+            addBook();
+        }
+    }//GEN-LAST:event_FieldDescriptionKeyPressed
 
     /**
      * @param args the command line arguments

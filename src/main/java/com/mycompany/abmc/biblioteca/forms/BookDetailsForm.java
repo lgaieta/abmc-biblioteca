@@ -71,7 +71,6 @@ public class BookDetailsForm extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Añadir nuevo libro");
-        setResizable(false);
         setSize(new java.awt.Dimension(376, 131));
 
         Title.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -145,19 +144,19 @@ public class BookDetailsForm extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(24, 24, 24)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(GoBackButton, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(Title, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(FieldName, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(FieldName, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE))
                             .addComponent(jLabel1)
                             .addComponent(DescriptionLabel))
                         .addGap(24, 24, 24)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2)
-                            .addComponent(FieldAuthor, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(FieldAuthor, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)))
                     .addComponent(FieldDescription, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(ButtonEdit)
@@ -204,6 +203,11 @@ public class BookDetailsForm extends javax.swing.JFrame {
     }//GEN-LAST:event_GoBackButtonMouseClicked
 
     private void ButtonDeleteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ButtonDeleteMouseClicked
+        int isSure = JOptionPane.showConfirmDialog(null, "¿Estás seguro de borrar el libro?", "Borrar el libro", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+        if (isSure == JOptionPane.NO_OPTION) {
+            return;
+        }
+        
         String query = "DELETE FROM libro WHERE id = ?";
 
         try {
@@ -321,7 +325,7 @@ public class BookDetailsForm extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new BookDetailsForm(9).setVisible(true);
+                new BookDetailsForm(11).setVisible(true);
             }
         });
     }
