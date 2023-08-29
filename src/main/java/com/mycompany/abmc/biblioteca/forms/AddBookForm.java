@@ -1,5 +1,6 @@
-package com.mycompany.abmc.biblioteca;
+package com.mycompany.abmc.biblioteca.forms;
 
+import com.mycompany.abmc.biblioteca.DBConnection;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import javax.swing.JOptionPane;

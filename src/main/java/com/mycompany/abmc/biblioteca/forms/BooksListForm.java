@@ -2,20 +2,15 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package com.mycompany.abmc.biblioteca;
+package com.mycompany.abmc.biblioteca.forms;
 
+import com.mycompany.abmc.biblioteca.DBConnection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 
-/**
- *
- * @author Luciano
- */
 public class BooksListForm extends javax.swing.JFrame {
 
     DBConnection db = null;
@@ -77,6 +72,7 @@ public class BooksListForm extends javax.swing.JFrame {
         SearchButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Lista de libros - Biblioteca E.E.S.T. N°1");
 
         BooksTable.setForeground(new java.awt.Color(8, 8, 8));
         BooksTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -100,6 +96,11 @@ public class BooksListForm extends javax.swing.JFrame {
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
+            }
+        });
+        BooksTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                BooksTableMouseClicked(evt);
             }
         });
         jScrollPane1.setViewportView(BooksTable);
@@ -129,6 +130,11 @@ public class BooksListForm extends javax.swing.JFrame {
         SearchTextField.setMinimumSize(new java.awt.Dimension(178, 32));
         SearchTextField.setName(""); // NOI18N
         SearchTextField.setPreferredSize(new java.awt.Dimension(178, 32));
+        SearchTextField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                SearchTextFieldKeyPressed(evt);
+            }
+        });
 
         SearchButton.setForeground(new java.awt.Color(8, 8, 8));
         SearchButton.setText("Buscar");
@@ -186,7 +192,7 @@ public class BooksListForm extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_NewBookButtonMouseClicked
 
-    private void SearchButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SearchButtonMouseClicked
+    void searchBooks() {
         String name = SearchTextField.getText();
 
         String query = "SELECT * FROM libro WHERE nombre LIKE ?";
@@ -215,7 +221,23 @@ public class BooksListForm extends javax.swing.JFrame {
         } catch (SQLException ex) {
             System.out.println(ex);
         }
+    }
+
+    private void SearchButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SearchButtonMouseClicked
+        searchBooks();
     }//GEN-LAST:event_SearchButtonMouseClicked
+
+    private void BooksTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BooksTableMouseClicked
+        int selectedId = (int) BooksTable.getModel().getValueAt(BooksTable.getSelectedRow(), 0);
+        new BookDetailsForm(selectedId).setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_BooksTableMouseClicked
+
+    private void SearchTextFieldKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_SearchTextFieldKeyPressed
+        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+            searchBooks();
+        }
+    }//GEN-LAST:event_SearchTextFieldKeyPressed
 
     /**
      * @param args the command line arguments

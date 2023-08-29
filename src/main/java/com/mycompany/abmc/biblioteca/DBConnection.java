@@ -10,7 +10,7 @@ public class DBConnection {
     String port = "3306";
     String database_name = "biblioteca_tecnica";
     String connection_url = "jdbc:mysql://" + host + ":" + port + "/" + database_name;
-    Connection connection = null;
+    public Connection connection = null;
 
     public void open() {
         try {
