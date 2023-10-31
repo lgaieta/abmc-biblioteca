@@ -1,11 +1,13 @@
 package com.mycompany.abmc.biblioteca.forms;
 
-import com.mycompany.abmc.biblioteca.DBConnection;
+import entities.Book;
+import java.awt.HeadlessException;
+import services.DBConnection;
 import java.awt.event.KeyEvent;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import javax.swing.JOptionPane;
+import services.BookStore;
 
 public class BookDetailsForm extends javax.swing.JFrame {
 
@@ -13,27 +15,16 @@ public class BookDetailsForm extends javax.swing.JFrame {
     int id;
 
     final void loadBooks() {
-        String query = "SELECT * FROM libro WHERE id = ?";
-
         db = new DBConnection();
-        db.open();
 
         try {
-            PreparedStatement statement = db.connection.prepareStatement(query);
-            statement.setInt(1, id);
-            System.out.println(statement);
-            ResultSet result = statement.executeQuery();
-            result.next();
+            Book book = BookStore.get(db, id);
 
-            String name = result.getString("nombre");
-            String author = result.getString("autor");
-            String description = result.getString("descripcion");
-
-            Title.setText(name);
-            FieldName.setText(name);
-            FieldAuthor.setText(author);
-            FieldDescription.setText(description);
-        } catch (SQLException ex) {
+            Title.setText(book.name);
+            FieldName.setText(book.name);
+            FieldAuthor.setText(book.author);
+            FieldDescription.setText(book.description);
+        } catch (Exception ex) {
             System.out.println(ex);
         }
     }
@@ -65,9 +56,12 @@ public class BookDetailsForm extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         ButtonEdit = new javax.swing.JButton();
         GoBackButton = new javax.swing.JButton();
-        FieldDescription = new javax.swing.JTextField();
         DescriptionLabel = new javax.swing.JLabel();
         ButtonDelete = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        FieldDescription = new javax.swing.JTextArea();
+        DescriptionLabel1 = new javax.swing.JLabel();
+        FieldTag = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Añadir nuevo libro");
@@ -109,21 +103,10 @@ public class BookDetailsForm extends javax.swing.JFrame {
         });
 
         GoBackButton.setText("Volver");
+        GoBackButton.setPreferredSize(new java.awt.Dimension(72, 32));
         GoBackButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 GoBackButtonMouseClicked(evt);
-            }
-        });
-
-        FieldDescription.setEditable(false);
-        FieldDescription.setBackground(new java.awt.Color(255, 255, 255));
-        FieldDescription.setForeground(new java.awt.Color(8, 8, 8));
-        FieldDescription.setHorizontalAlignment(javax.swing.JTextField.LEFT);
-        FieldDescription.setMinimumSize(new java.awt.Dimension(64, 32));
-        FieldDescription.setPreferredSize(new java.awt.Dimension(64, 32));
-        FieldDescription.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                FieldDescriptionKeyPressed(evt);
             }
         });
 
@@ -138,15 +121,27 @@ public class BookDetailsForm extends javax.swing.JFrame {
             }
         });
 
+        FieldDescription.setEditable(false);
+        FieldDescription.setBackground(new java.awt.Color(255, 255, 255));
+        FieldDescription.setColumns(20);
+        FieldDescription.setLineWrap(true);
+        FieldDescription.setRows(5);
+        jScrollPane1.setViewportView(FieldDescription);
+
+        DescriptionLabel1.setText("Género");
+
+        FieldTag.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(24, 24, 24)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(GoBackButton, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(FieldTag, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1)
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(Title, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -157,9 +152,17 @@ public class BookDetailsForm extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2)
                             .addComponent(FieldAuthor, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)))
-                    .addComponent(FieldDescription, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(ButtonEdit)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(GoBackButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(DescriptionLabel1)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(ButtonEdit)))
                         .addGap(16, 16, 16)
                         .addComponent(ButtonDelete)))
                 .addGap(24, 24, 24))
@@ -170,7 +173,7 @@ public class BookDetailsForm extends javax.swing.JFrame {
                 .addGap(24, 24, 24)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(Title)
-                    .addComponent(GoBackButton, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(GoBackButton, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(24, 24, 24)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
@@ -181,8 +184,12 @@ public class BookDetailsForm extends javax.swing.JFrame {
                     .addComponent(FieldAuthor, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(16, 16, 16)
                 .addComponent(DescriptionLabel)
-                .addGap(4, 4, 4)
-                .addComponent(FieldDescription, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(16, 16, 16)
+                .addComponent(DescriptionLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(FieldTag, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(ButtonEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -207,16 +214,12 @@ public class BookDetailsForm extends javax.swing.JFrame {
         if (isSure == JOptionPane.NO_OPTION) {
             return;
         }
-        
-        String query = "DELETE FROM libro WHERE id = ?";
 
         try {
-            PreparedStatement statement = db.connection.prepareStatement(query);
-            statement.setInt(1, id);
-            statement.execute();
+            BookStore.delete(db, id);
             JOptionPane.showMessageDialog(null, "Libro eliminado correctamente.");
             returnToBooksList();
-        } catch (SQLException ex) {
+        } catch (HeadlessException ex) {
             System.out.println(ex);
         }
 
@@ -234,6 +237,7 @@ public class BookDetailsForm extends javax.swing.JFrame {
             String newName = FieldName.getText();
             String newAuthor = FieldAuthor.getText();
             String newDescription = FieldDescription.getText();
+            String tag = FieldTag.getSelectedItem().toString();
 
             String query = "UPDATE libro SET nombre = ?, autor = ?, descripcion = ? WHERE id = ?";
 
@@ -262,23 +266,17 @@ public class BookDetailsForm extends javax.swing.JFrame {
     }//GEN-LAST:event_ButtonEditMouseClicked
 
     private void FieldNameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_FieldNameKeyPressed
-        if(evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER && isEditable == true ) {
+        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER && isEditable == true) {
             editingLogic();
         }
     }//GEN-LAST:event_FieldNameKeyPressed
 
     private void FieldAuthorKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_FieldAuthorKeyPressed
-        if(evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER && isEditable == true ) {
+        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER && isEditable == true) {
             editingLogic();
         }
     }//GEN-LAST:event_FieldAuthorKeyPressed
 
-    private void FieldDescriptionKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_FieldDescriptionKeyPressed
-        if(evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER && isEditable == true ) {
-            editingLogic();
-        }
-    }//GEN-LAST:event_FieldDescriptionKeyPressed
-    
     /**
      * @param args the command line arguments
      */
@@ -334,12 +332,15 @@ public class BookDetailsForm extends javax.swing.JFrame {
     private javax.swing.JButton ButtonDelete;
     private javax.swing.JButton ButtonEdit;
     private javax.swing.JLabel DescriptionLabel;
+    private javax.swing.JLabel DescriptionLabel1;
     private javax.swing.JTextField FieldAuthor;
-    private javax.swing.JTextField FieldDescription;
+    private javax.swing.JTextArea FieldDescription;
     private javax.swing.JTextField FieldName;
+    private javax.swing.JComboBox<String> FieldTag;
     private javax.swing.JButton GoBackButton;
     private javax.swing.JLabel Title;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 }

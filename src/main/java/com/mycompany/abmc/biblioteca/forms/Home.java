@@ -30,8 +30,14 @@ public class Home extends javax.swing.JFrame {
         Title.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         Title.setText("Biblioteca");
 
-        SeeBooksButton.setForeground(new java.awt.Color(8, 8, 8));
+        SeeBooksButton.setBackground(new java.awt.Color(76, 0, 0));
+        SeeBooksButton.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        SeeBooksButton.setForeground(new java.awt.Color(255, 255, 255));
         SeeBooksButton.setText("Ver libros");
+        SeeBooksButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        SeeBooksButton.setMaximumSize(new java.awt.Dimension(79, 36));
+        SeeBooksButton.setMinimumSize(new java.awt.Dimension(79, 36));
+        SeeBooksButton.setPreferredSize(new java.awt.Dimension(79, 36));
         SeeBooksButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 SeeBooksButtonMouseClicked(evt);
@@ -42,11 +48,11 @@ public class Home extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(Title, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addGap(80, 80, 80)
-                .addComponent(SeeBooksButton)
-                .addContainerGap(80, Short.MAX_VALUE))
-            .addComponent(Title, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(71, 71, 71)
+                .addComponent(SeeBooksButton, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -54,8 +60,8 @@ public class Home extends javax.swing.JFrame {
                 .addGap(24, 24, 24)
                 .addComponent(Title)
                 .addGap(24, 24, 24)
-                .addComponent(SeeBooksButton, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(30, Short.MAX_VALUE))
+                .addComponent(SeeBooksButton, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(24, Short.MAX_VALUE))
         );
 
         pack();

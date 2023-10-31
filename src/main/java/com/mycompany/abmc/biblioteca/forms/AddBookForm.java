@@ -1,9 +1,10 @@
 package com.mycompany.abmc.biblioteca.forms;
 
-import com.mycompany.abmc.biblioteca.DBConnection;
-import java.sql.SQLException;
-import java.sql.PreparedStatement;
+import entities.Book;
+import java.awt.HeadlessException;
+import services.DBConnection;
 import javax.swing.JOptionPane;
+import services.BookStore;
 
 public class AddBookForm extends javax.swing.JFrame {
 
@@ -23,6 +24,8 @@ public class AddBookForm extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
         Title = new javax.swing.JLabel();
         FieldName = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
@@ -30,8 +33,15 @@ public class AddBookForm extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         ButtonAdd = new javax.swing.JButton();
         GoBackButton = new javax.swing.JButton();
-        FieldDescription = new javax.swing.JTextField();
         DescriptionLabel = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        FieldDescription = new javax.swing.JTextArea();
+        jLabel3 = new javax.swing.JLabel();
+        FieldTag = new javax.swing.JComboBox<>();
+
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jScrollPane1.setViewportView(jTextArea1);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Añadir nuevo libro");
@@ -43,6 +53,7 @@ public class AddBookForm extends javax.swing.JFrame {
         Title.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         Title.setText("Añadir nuevo libro");
 
+        FieldName.setPreferredSize(new java.awt.Dimension(64, 32));
         FieldName.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 FieldNameKeyPressed(evt);
@@ -51,6 +62,7 @@ public class AddBookForm extends javax.swing.JFrame {
 
         jLabel1.setText("Nombre");
 
+        FieldAuthor.setPreferredSize(new java.awt.Dimension(64, 32));
         FieldAuthor.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 FieldAuthorKeyPressed(evt);
@@ -59,7 +71,7 @@ public class AddBookForm extends javax.swing.JFrame {
 
         jLabel2.setText("Autor");
 
-        ButtonAdd.setBackground(new java.awt.Color(0, 0, 255));
+        ButtonAdd.setBackground(new java.awt.Color(76, 0, 0));
         ButtonAdd.setForeground(new java.awt.Color(255, 255, 255));
         ButtonAdd.setText("Añadir");
         ButtonAdd.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -75,14 +87,17 @@ public class AddBookForm extends javax.swing.JFrame {
             }
         });
 
-        FieldDescription.setHorizontalAlignment(javax.swing.JTextField.LEFT);
-        FieldDescription.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                FieldDescriptionKeyPressed(evt);
-            }
-        });
-
         DescriptionLabel.setText("Descripción");
+
+        FieldDescription.setColumns(20);
+        FieldDescription.setLineWrap(true);
+        FieldDescription.setRows(5);
+        jScrollPane2.setViewportView(FieldDescription);
+
+        jLabel3.setText("Género");
+
+        FieldTag.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Leyes", "Economía", "Derecho", "Filosofía", "Diccionarios en inglés", "Ciencias sociales" }));
+        FieldTag.setMinimumSize(new java.awt.Dimension(72, 24));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -90,9 +105,11 @@ public class AddBookForm extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(24, 24, 24)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(GoBackButton)
-                    .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(ButtonAdd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel3)
+                    .addComponent(GoBackButton, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addComponent(Title, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -103,12 +120,9 @@ public class AddBookForm extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2)
                             .addComponent(FieldAuthor, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(FieldDescription, javax.swing.GroupLayout.Alignment.LEADING))
-                .addGap(24, 24, 24))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(157, 157, 157)
-                .addComponent(ButtonAdd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(157, 157, 157))
+                    .addComponent(jScrollPane2)
+                    .addComponent(FieldTag, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(24, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -116,21 +130,25 @@ public class AddBookForm extends javax.swing.JFrame {
                 .addGap(24, 24, 24)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(Title)
-                    .addComponent(GoBackButton, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(GoBackButton, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(24, 24, 24)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(FieldName, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(FieldAuthor, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(FieldName, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(FieldAuthor, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(16, 16, 16)
                 .addComponent(DescriptionLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(FieldDescription, javax.swing.GroupLayout.DEFAULT_SIZE, 29, Short.MAX_VALUE)
-                .addGap(24, 24, 24)
-                .addComponent(ButtonAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(16, 16, 16)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(FieldTag, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(16, 16, 16)
+                .addComponent(ButtonAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(24, Short.MAX_VALUE))
         );
 
@@ -141,22 +159,18 @@ public class AddBookForm extends javax.swing.JFrame {
         String name = FieldName.getText();
         String author = FieldAuthor.getText();
         String description = FieldDescription.getText();
-
-        String query = "INSERT INTO libro (nombre, autor, descripcion) VALUES (?, ?, ?)";
-
+        String tag = FieldTag.getSelectedItem().toString();
+        
+        Book book = new Book(null, name, author, description, tag);
+        
         DBConnection db = new DBConnection();
-        db.open();
-
+        
         try {
-            PreparedStatement statement = db.connection.prepareStatement(query);
-            statement.setString(1, name);
-            statement.setString(2, author);
-            statement.setString(3, description);
-            statement.execute();
+            BookStore.save(db, book);
             JOptionPane.showMessageDialog(null, "Libro añadido correctamente!");
             this.dispose();
             new BooksListForm().setVisible(true);
-        } catch (SQLException ex) {
+        } catch (HeadlessException ex) {
             System.out.println(ex);
         }
     }
@@ -181,13 +195,6 @@ public class AddBookForm extends javax.swing.JFrame {
             addBook();
         }
     }//GEN-LAST:event_FieldAuthorKeyPressed
-
-    private void FieldDescriptionKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_FieldDescriptionKeyPressed
-        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
-            addBook();
-        }
-    }//GEN-LAST:event_FieldDescriptionKeyPressed
-
     /**
      * @param args the command line arguments
      */
@@ -234,11 +241,16 @@ public class AddBookForm extends javax.swing.JFrame {
     private javax.swing.JButton ButtonAdd;
     private javax.swing.JLabel DescriptionLabel;
     private javax.swing.JTextField FieldAuthor;
-    private javax.swing.JTextField FieldDescription;
+    private javax.swing.JTextArea FieldDescription;
     private javax.swing.JTextField FieldName;
+    private javax.swing.JComboBox<String> FieldTag;
     private javax.swing.JButton GoBackButton;
     private javax.swing.JLabel Title;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTextArea jTextArea1;
     // End of variables declaration//GEN-END:variables
 }

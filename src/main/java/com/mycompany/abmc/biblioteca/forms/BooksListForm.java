@@ -4,12 +4,13 @@
  */
 package com.mycompany.abmc.biblioteca.forms;
 
-import com.mycompany.abmc.biblioteca.DBConnection;
+import services.DBConnection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import javax.swing.table.DefaultTableModel;
+import services.BookStore;
 
 public class BooksListForm extends javax.swing.JFrame {
 
@@ -25,14 +26,10 @@ public class BooksListForm extends javax.swing.JFrame {
         BooksTable.setModel(tableModel);
 
         db = new DBConnection();
-        db.open();
-
-        String query = "SELECT * FROM libro";
 
         try {
-            PreparedStatement statement = db.connection.prepareStatement(query);
-            ResultSet result = statement.executeQuery();
-
+            ResultSet result = BookStore.getAll(db);
+            
             ResultSetMetaData resultMetaData = result.getMetaData();
             int numberOfColumns = resultMetaData.getColumnCount();
 
@@ -40,6 +37,7 @@ public class BooksListForm extends javax.swing.JFrame {
             tableModel.addColumn("Nombre");
             tableModel.addColumn("Autor");
             tableModel.addColumn("Descripción");
+            tableModel.addColumn("Género");
 
             while (result.next()) {
                 Object[] filas = new Object[numberOfColumns];
@@ -69,7 +67,8 @@ public class BooksListForm extends javax.swing.JFrame {
         Title = new javax.swing.JLabel();
         NewBookButton = new javax.swing.JButton();
         SearchTextField = new javax.swing.JTextField();
-        SearchButton = new javax.swing.JButton();
+        BackButton = new javax.swing.JButton();
+        SearchButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Lista de libros - Biblioteca E.E.S.T. N°1");
@@ -80,24 +79,9 @@ public class BooksListForm extends javax.swing.JFrame {
 
             },
             new String [] {
-                "N° Libro", "Nombre", "Autor"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, false, false
-            };
 
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
             }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
+        ));
         BooksTable.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 BooksTableMouseClicked(evt);
@@ -110,11 +94,12 @@ public class BooksListForm extends javax.swing.JFrame {
         Title.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         Title.setText("Lista de libros - Biblioteca E.E.S.T. N°1");
 
-        NewBookButton.setBackground(new java.awt.Color(0, 0, 153));
+        NewBookButton.setBackground(new java.awt.Color(76, 0, 0));
         NewBookButton.setForeground(new java.awt.Color(255, 255, 255));
         NewBookButton.setText("Nuevo Libro");
+        NewBookButton.setBorder(null);
         NewBookButton.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        NewBookButton.setMargin(new java.awt.Insets(3, 6, 3, 6));
+        NewBookButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
         NewBookButton.setMaximumSize(new java.awt.Dimension(113, 32));
         NewBookButton.setMinimumSize(new java.awt.Dimension(113, 32));
         NewBookButton.setPreferredSize(new java.awt.Dimension(95, 32));
@@ -136,17 +121,31 @@ public class BooksListForm extends javax.swing.JFrame {
             }
         });
 
-        SearchButton.setForeground(new java.awt.Color(8, 8, 8));
-        SearchButton.setText("Buscar");
-        SearchButton.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        SearchButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        SearchButton.setMaximumSize(new java.awt.Dimension(77, 32));
-        SearchButton.setMinimumSize(new java.awt.Dimension(77, 32));
-        SearchButton.setName(""); // NOI18N
-        SearchButton.setPreferredSize(new java.awt.Dimension(77, 32));
-        SearchButton.addMouseListener(new java.awt.event.MouseAdapter() {
+        BackButton.setForeground(new java.awt.Color(8, 8, 8));
+        BackButton.setText("Volver");
+        BackButton.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        BackButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        BackButton.setMaximumSize(new java.awt.Dimension(77, 32));
+        BackButton.setMinimumSize(new java.awt.Dimension(77, 32));
+        BackButton.setName(""); // NOI18N
+        BackButton.setPreferredSize(new java.awt.Dimension(77, 36));
+        BackButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                SearchButtonMouseClicked(evt);
+                BackButtonMouseClicked(evt);
+            }
+        });
+
+        SearchButton1.setForeground(new java.awt.Color(8, 8, 8));
+        SearchButton1.setText("Buscar");
+        SearchButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        SearchButton1.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        SearchButton1.setMaximumSize(new java.awt.Dimension(77, 32));
+        SearchButton1.setMinimumSize(new java.awt.Dimension(77, 32));
+        SearchButton1.setName(""); // NOI18N
+        SearchButton1.setPreferredSize(new java.awt.Dimension(77, 36));
+        SearchButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                SearchButton1MouseClicked(evt);
             }
         });
 
@@ -161,23 +160,29 @@ public class BooksListForm extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addComponent(SearchTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(16, 16, 16)
-                        .addComponent(SearchButton, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(SearchButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(NewBookButton, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(Title, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(NewBookButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addComponent(Title, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(BackButton, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(24, 24, 24))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(24, 24, 24)
-                .addComponent(Title)
-                .addGap(24, 24, 24)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Title)
+                    .addComponent(BackButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(15, 15, 15)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(NewBookButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(SearchTextField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(SearchButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(16, 16, 16)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(SearchTextField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(SearchButton1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(NewBookButton, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(14, 14, 14)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)
                 .addGap(24, 24, 24))
         );
@@ -223,9 +228,10 @@ public class BooksListForm extends javax.swing.JFrame {
         }
     }
 
-    private void SearchButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SearchButtonMouseClicked
-        searchBooks();
-    }//GEN-LAST:event_SearchButtonMouseClicked
+    private void BackButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BackButtonMouseClicked
+        new Home().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_BackButtonMouseClicked
 
     private void BooksTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BooksTableMouseClicked
         int selectedId = (int) BooksTable.getModel().getValueAt(BooksTable.getSelectedRow(), 0);
@@ -238,6 +244,10 @@ public class BooksListForm extends javax.swing.JFrame {
             searchBooks();
         }
     }//GEN-LAST:event_SearchTextFieldKeyPressed
+
+    private void SearchButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SearchButton1MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_SearchButton1MouseClicked
 
     /**
      * @param args the command line arguments
@@ -276,9 +286,10 @@ public class BooksListForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton BackButton;
     private javax.swing.JTable BooksTable;
     private javax.swing.JButton NewBookButton;
-    private javax.swing.JButton SearchButton;
+    private javax.swing.JButton SearchButton1;
     private javax.swing.JTextField SearchTextField;
     private javax.swing.JLabel Title;
     private javax.swing.JScrollPane jScrollPane1;

@@ -1,4 +1,4 @@
-package com.mycompany.abmc.biblioteca;
+package services;
 import java.sql.DriverManager;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -17,6 +17,14 @@ public class DBConnection {
             connection = DriverManager.getConnection(connection_url, user, password);
         } catch (SQLException ex) {
             System.out.println(ex); 
+        }
+    }
+    
+    public void close() {
+        try {
+            connection.close();
+        } catch (SQLException ex) {
+            System.out.println(ex);
         }
     }
 }
