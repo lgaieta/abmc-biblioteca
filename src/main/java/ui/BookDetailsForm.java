@@ -1,7 +1,9 @@
-package com.mycompany.abmc.biblioteca.forms;
+package ui;
 
 import entities.Book;
 import java.awt.HeadlessException;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import services.DBConnection;
 import java.awt.event.KeyEvent;
 import java.sql.SQLException;
@@ -28,6 +30,14 @@ public class BookDetailsForm extends javax.swing.JFrame {
             System.out.println(ex);
         }
     }
+    
+    private void loadTags() {
+        FieldTag.addItemListener(new BookDetailsForm(id));
+    }
+    
+    public void itemStateChanged(ItemEvent e) {
+        System.out.println(FieldTag.getSelectedItem());
+    }
 
     /**
      * Creates new form BooksForm
@@ -38,6 +48,7 @@ public class BookDetailsForm extends javax.swing.JFrame {
         initComponents();
         this.id = id;
         loadBooks();
+        loadTags();
     }
 
     /**
@@ -49,6 +60,8 @@ public class BookDetailsForm extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jList1 = new javax.swing.JList<>();
         Title = new javax.swing.JLabel();
         FieldName = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
@@ -62,6 +75,13 @@ public class BookDetailsForm extends javax.swing.JFrame {
         FieldDescription = new javax.swing.JTextArea();
         DescriptionLabel1 = new javax.swing.JLabel();
         FieldTag = new javax.swing.JComboBox<>();
+
+        jList1.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane2.setViewportView(jList1);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Añadir nuevo libro");
@@ -130,7 +150,10 @@ public class BookDetailsForm extends javax.swing.JFrame {
 
         DescriptionLabel1.setText("Género");
 
+        FieldTag.setEditable(true);
+        FieldTag.setMaximumRowCount(50);
         FieldTag.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        FieldTag.setAutoscrolls(true);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -341,6 +364,8 @@ public class BookDetailsForm extends javax.swing.JFrame {
     private javax.swing.JLabel Title;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JList<String> jList1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     // End of variables declaration//GEN-END:variables
 }

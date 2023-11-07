@@ -1,4 +1,4 @@
-package com.mycompany.abmc.biblioteca.forms;
+package ui;
 
 import entities.Book;
 import java.awt.HeadlessException;

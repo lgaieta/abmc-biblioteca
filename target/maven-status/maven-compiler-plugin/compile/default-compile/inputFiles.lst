@@ -1,6 +1,8 @@
-C:\Users\Luciano\Documents\NetBeansProjects\ABMC-Biblioteca\src\main\java\com\mycompany\abmc\biblioteca\forms\BooksListForm.java
+C:\Users\Luciano\Documents\NetBeansProjects\ABMC-Biblioteca\src\main\java\services\BookStore.java
+C:\Users\Luciano\Documents\NetBeansProjects\ABMC-Biblioteca\src\main\java\ui\BooksListForm.java
 C:\Users\Luciano\Documents\NetBeansProjects\ABMC-Biblioteca\src\main\java\com\mycompany\abmc\biblioteca\ABMCBiblioteca.java
-C:\Users\Luciano\Documents\NetBeansProjects\ABMC-Biblioteca\src\main\java\com\mycompany\abmc\biblioteca\forms\AddBookForm.java
-C:\Users\Luciano\Documents\NetBeansProjects\ABMC-Biblioteca\src\main\java\com\mycompany\abmc\biblioteca\forms\Home.java
-C:\Users\Luciano\Documents\NetBeansProjects\ABMC-Biblioteca\src\main\java\com\mycompany\abmc\biblioteca\DBConnection.java
-C:\Users\Luciano\Documents\NetBeansProjects\ABMC-Biblioteca\src\main\java\com\mycompany\abmc\biblioteca\forms\BookDetailsForm.java
+C:\Users\Luciano\Documents\NetBeansProjects\ABMC-Biblioteca\src\main\java\ui\BookDetailsForm.java
+C:\Users\Luciano\Documents\NetBeansProjects\ABMC-Biblioteca\src\main\java\entities\Book.java
+C:\Users\Luciano\Documents\NetBeansProjects\ABMC-Biblioteca\src\main\java\ui\AddBookForm.java
+C:\Users\Luciano\Documents\NetBeansProjects\ABMC-Biblioteca\src\main\java\ui\Home.java
+C:\Users\Luciano\Documents\NetBeansProjects\ABMC-Biblioteca\src\main\java\services\DBConnection.java

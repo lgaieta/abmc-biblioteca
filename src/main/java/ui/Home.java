@@ -1,4 +1,4 @@
-package com.mycompany.abmc.biblioteca.forms;
+package ui;
 
 public class Home extends javax.swing.JFrame {
 

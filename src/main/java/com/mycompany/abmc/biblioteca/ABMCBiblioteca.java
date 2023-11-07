@@ -1,6 +1,6 @@
 package com.mycompany.abmc.biblioteca;
 
-import com.mycompany.abmc.biblioteca.forms.Home;
+import ui.Home;
 
 public class ABMCBiblioteca {
     public static void main(String[] args) {
