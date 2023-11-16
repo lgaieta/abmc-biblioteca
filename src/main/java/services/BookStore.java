@@ -31,7 +31,7 @@ public class BookStore {
             String author = result.getString("autor");
             String description = result.getString("descripcion");
             String tag = result.getString("genero");
-
+            
             Book book = new Book(id, name, author, description, tag);
 
             return book;
@@ -43,7 +43,6 @@ public class BookStore {
 
     public static ResultSet getAll(DBConnection db) {
         try {
-
             db.open();
 
             String query = "SELECT * FROM libro";

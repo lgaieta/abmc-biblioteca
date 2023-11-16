@@ -5,7 +5,7 @@ import java.sql.SQLException;
 
 public class DBConnection {
     String user = "root";
-    String password = "";
+    String password = "982006";
     String host = "localhost";
     String port = "3306";
     String database_name = "biblioteca_tecnica";

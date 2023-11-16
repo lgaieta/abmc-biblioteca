@@ -193,7 +193,7 @@ public class BooksListForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void NewBookButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_NewBookButtonMouseClicked
-        new AddBookForm().setVisible(true);
+        new CreateBookForm().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_NewBookButtonMouseClicked
 

@@ -8,47 +8,92 @@ import services.DBConnection;
 import java.awt.event.KeyEvent;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
+import java.util.ArrayList;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import services.BookStore;
+import services.TagStore;
 
 public class BookDetailsForm extends javax.swing.JFrame {
-
     DBConnection db = null;
     int id;
+    Book currentBook;
+    
+    boolean isEditable = false;
+    
+    public BookDetailsForm(int id) {
+        initComponents();
+        this.id = id;
+        loadBooks();
+    }
 
     final void loadBooks() {
         db = new DBConnection();
 
         try {
             Book book = BookStore.get(db, id);
-
+            currentBook = book;
             Title.setText(book.name);
             FieldName.setText(book.name);
             FieldAuthor.setText(book.author);
             FieldDescription.setText(book.description);
+            loadOneTag(book.tag);
         } catch (Exception ex) {
             System.out.println(ex);
         }
     }
     
-    private void loadTags() {
-        FieldTag.addItemListener(new BookDetailsForm(id));
+    private void loadOneTag(String tag) {
+        String[] arr = {tag};
+        FieldTag.setModel(new DefaultComboBoxModel(arr));
     }
     
-    public void itemStateChanged(ItemEvent e) {
-        System.out.println(FieldTag.getSelectedItem());
+    private void loadAllTags() {
+        ArrayList<String> tags = TagStore.getAll(db);
+        FieldTag.setModel(new DefaultComboBoxModel(tags.toArray()));
+        FieldTag.setSelectedItem(currentBook.tag);
     }
+    
+    void editingLogic() {
+        if (isEditable == false) {
+            isEditable = true;
+            ButtonEdit.setText("Confirmar");
+            loadAllTags();
+        } else {
+            isEditable = false;
 
-    /**
-     * Creates new form BooksForm
-     *
-     * @param id Book's id
-     */
-    public BookDetailsForm(int id) {
-        initComponents();
-        this.id = id;
-        loadBooks();
-        loadTags();
+            String newName = FieldName.getText();
+            String newAuthor = FieldAuthor.getText();
+            String newDescription = FieldDescription.getText();
+            String newTag = FieldTag.getSelectedItem().toString();
+            
+            System.out.println(newTag);
+
+            String query = "UPDATE libro SET nombre = ?, autor = ?, descripcion = ?, genero = ? WHERE id = ?";
+
+            try {
+                db.open();
+                
+                PreparedStatement statement = db.connection.prepareStatement(query);
+                statement.setString(1, newName);
+                statement.setString(2, newAuthor);
+                statement.setString(3, newDescription);
+                statement.setString(4, newTag);
+                statement.setInt(5, id);
+
+                statement.execute();
+                JOptionPane.showMessageDialog(null, "Libro editado correctamente.");
+                Title.setText(newName);
+                db.close();
+            } catch (SQLException ex) {
+                System.out.println(ex);
+            }
+            ButtonEdit.setText("Editar");
+            loadOneTag(newTag);
+        }
+        FieldName.setEditable(isEditable);
+        FieldAuthor.setEditable(isEditable);
+        FieldDescription.setEditable(isEditable);
     }
 
     /**
@@ -248,42 +293,6 @@ public class BookDetailsForm extends javax.swing.JFrame {
 
     }//GEN-LAST:event_ButtonDeleteMouseClicked
 
-    boolean isEditable = false;
-
-    void editingLogic() {
-        if (isEditable == false) {
-            isEditable = true;
-            ButtonEdit.setText("Confirmar");
-        } else {
-            isEditable = false;
-
-            String newName = FieldName.getText();
-            String newAuthor = FieldAuthor.getText();
-            String newDescription = FieldDescription.getText();
-            String tag = FieldTag.getSelectedItem().toString();
-
-            String query = "UPDATE libro SET nombre = ?, autor = ?, descripcion = ? WHERE id = ?";
-
-            try {
-                PreparedStatement statement = db.connection.prepareStatement(query);
-                statement.setString(1, newName);
-                statement.setString(2, newAuthor);
-                statement.setString(3, newDescription);
-                statement.setInt(4, id);
-
-                statement.execute();
-                JOptionPane.showMessageDialog(null, "Libro editado correctamente.");
-                Title.setText(newName);
-            } catch (SQLException ex) {
-                System.out.println(ex);
-            }
-            ButtonEdit.setText("Editar");
-        }
-        FieldName.setEditable(isEditable);
-        FieldAuthor.setEditable(isEditable);
-        FieldDescription.setEditable(isEditable);
-    }
-
     private void ButtonEditMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ButtonEditMouseClicked
         editingLogic();
     }//GEN-LAST:event_ButtonEditMouseClicked
@@ -346,7 +355,7 @@ public class BookDetailsForm extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new BookDetailsForm(11).setVisible(true);
+                new BookDetailsForm(26).setVisible(true);
             }
         });
     }
