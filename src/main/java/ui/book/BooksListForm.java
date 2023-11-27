@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package ui;
+package ui.book;
 
 import services.DBConnection;
 import java.sql.PreparedStatement;
@@ -246,7 +246,7 @@ public class BooksListForm extends javax.swing.JFrame {
     }//GEN-LAST:event_SearchTextFieldKeyPressed
 
     private void SearchButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SearchButton1MouseClicked
-        // TODO add your handling code here:
+        searchBooks();
     }//GEN-LAST:event_SearchButton1MouseClicked
 
     /**

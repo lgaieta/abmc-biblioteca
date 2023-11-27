@@ -1,4 +1,6 @@
-package ui;
+package ui.book;
+
+import ui.member.MembersListForm;
 
 public class Home extends javax.swing.JFrame {
 
@@ -16,7 +18,9 @@ public class Home extends javax.swing.JFrame {
     private void initComponents() {
 
         Title = new javax.swing.JLabel();
-        SeeBooksButton = new javax.swing.JButton();
+        OpenBooksButton = new javax.swing.JButton();
+        OpenMembersButton = new javax.swing.JButton();
+        Title1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Biblioteca");
@@ -30,19 +34,38 @@ public class Home extends javax.swing.JFrame {
         Title.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         Title.setText("Biblioteca");
 
-        SeeBooksButton.setBackground(new java.awt.Color(76, 0, 0));
-        SeeBooksButton.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        SeeBooksButton.setForeground(new java.awt.Color(255, 255, 255));
-        SeeBooksButton.setText("Ver libros");
-        SeeBooksButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
-        SeeBooksButton.setMaximumSize(new java.awt.Dimension(79, 36));
-        SeeBooksButton.setMinimumSize(new java.awt.Dimension(79, 36));
-        SeeBooksButton.setPreferredSize(new java.awt.Dimension(79, 36));
-        SeeBooksButton.addMouseListener(new java.awt.event.MouseAdapter() {
+        OpenBooksButton.setBackground(new java.awt.Color(76, 0, 0));
+        OpenBooksButton.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        OpenBooksButton.setForeground(new java.awt.Color(255, 255, 255));
+        OpenBooksButton.setText("Ver libros");
+        OpenBooksButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        OpenBooksButton.setMaximumSize(new java.awt.Dimension(79, 36));
+        OpenBooksButton.setMinimumSize(new java.awt.Dimension(79, 36));
+        OpenBooksButton.setPreferredSize(new java.awt.Dimension(79, 36));
+        OpenBooksButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                SeeBooksButtonMouseClicked(evt);
+                OpenBooksButtonMouseClicked(evt);
             }
         });
+
+        OpenMembersButton.setBackground(new java.awt.Color(76, 0, 0));
+        OpenMembersButton.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        OpenMembersButton.setForeground(new java.awt.Color(255, 255, 255));
+        OpenMembersButton.setText("Ver socios");
+        OpenMembersButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
+        OpenMembersButton.setMaximumSize(new java.awt.Dimension(79, 36));
+        OpenMembersButton.setMinimumSize(new java.awt.Dimension(79, 36));
+        OpenMembersButton.setPreferredSize(new java.awt.Dimension(79, 36));
+        OpenMembersButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                OpenMembersButtonMouseClicked(evt);
+            }
+        });
+
+        Title1.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        Title1.setForeground(new java.awt.Color(8, 8, 8));
+        Title1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        Title1.setText("E.E.S.T. N°1");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -50,8 +73,14 @@ public class Home extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(Title, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addGap(71, 71, 71)
-                .addComponent(SeeBooksButton, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap()
+                .addComponent(Title1, javax.swing.GroupLayout.DEFAULT_SIZE, 227, Short.MAX_VALUE)
+                .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(55, 55, 55)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(OpenMembersButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(OpenBooksButton, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -59,18 +88,27 @@ public class Home extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(24, 24, 24)
                 .addComponent(Title)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(Title1)
                 .addGap(24, 24, 24)
-                .addComponent(SeeBooksButton, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(OpenBooksButton, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(OpenMembersButton, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(24, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void SeeBooksButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SeeBooksButtonMouseClicked
+    private void OpenBooksButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_OpenBooksButtonMouseClicked
         new BooksListForm().setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_SeeBooksButtonMouseClicked
+    }//GEN-LAST:event_OpenBooksButtonMouseClicked
+
+    private void OpenMembersButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_OpenMembersButtonMouseClicked
+        new MembersListForm().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_OpenMembersButtonMouseClicked
 
     /**
      * @param args the command line arguments
@@ -111,7 +149,9 @@ public class Home extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton SeeBooksButton;
+    private javax.swing.JButton OpenBooksButton;
+    private javax.swing.JButton OpenMembersButton;
     private javax.swing.JLabel Title;
+    private javax.swing.JLabel Title1;
     // End of variables declaration//GEN-END:variables
 }

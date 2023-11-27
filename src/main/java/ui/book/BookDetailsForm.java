@@ -1,4 +1,4 @@
-package ui;
+package ui.book;
 
 import entities.Book;
 import java.awt.HeadlessException;

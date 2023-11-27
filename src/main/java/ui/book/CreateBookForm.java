@@ -1,18 +1,24 @@
-package ui;
+package ui.book;
 
 import entities.Book;
 import java.awt.HeadlessException;
+import java.util.ArrayList;
+import javax.swing.DefaultComboBoxModel;
 import services.DBConnection;
 import javax.swing.JOptionPane;
 import services.BookStore;
+import services.TagStore;
 
 public class CreateBookForm extends javax.swing.JFrame {
 
+    DBConnection db = new DBConnection();
+        
     /**
      * Creates new form BooksForm
      */
     public CreateBookForm() {
         initComponents();
+        loadTags();
     }
 
     /**
@@ -96,7 +102,6 @@ public class CreateBookForm extends javax.swing.JFrame {
 
         jLabel3.setText("Género");
 
-        FieldTag.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Leyes", "Economía", "Derecho", "Filosofía", "Diccionarios en inglés", "Ciencias sociales" }));
         FieldTag.setMinimumSize(new java.awt.Dimension(72, 24));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -161,9 +166,7 @@ public class CreateBookForm extends javax.swing.JFrame {
         String description = FieldDescription.getText();
         String tag = FieldTag.getSelectedItem().toString();
         
-        Book book = new Book(null, name, author, description, tag);
-        
-        DBConnection db = new DBConnection();
+        Book book = new Book(null, name, author, description, tag); 
         
         try {
             BookStore.save(db, book);
@@ -173,6 +176,11 @@ public class CreateBookForm extends javax.swing.JFrame {
         } catch (HeadlessException ex) {
             System.out.println(ex);
         }
+    }
+    
+    void loadTags() {
+        ArrayList<String> tags = TagStore.getAll(db);
+        FieldTag.setModel(new DefaultComboBoxModel(tags.toArray()));
     }
     
     private void ButtonAddMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ButtonAddMouseClicked
