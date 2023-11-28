@@ -1,30 +1,25 @@
 package ui.member;
 
-import ui.book.*;
 import entities.Book;
+import entities.Member;
 import java.awt.HeadlessException;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import services.DBConnection;
-import java.awt.event.KeyEvent;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
-import java.util.ArrayList;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import services.BookStore;
-import services.TagStore;
+import services.MemberStore;
 
 public class MemberDetailsForm extends javax.swing.JFrame {
     DBConnection db = null;
-    int id;
-    Book currentBook;
+    String dni;
+    Member currentMember;
     
     boolean isEditable = false;
     
-    public MemberDetailsForm(int id) {
+    public MemberDetailsForm(String dni) {
         initComponents();
-        this.id = id;
+        this.dni = dni;
         loadBooks();
     }
 
@@ -32,69 +27,49 @@ public class MemberDetailsForm extends javax.swing.JFrame {
         db = new DBConnection();
 
         try {
-            Book book = BookStore.get(db, id);
-            currentBook = book;
-            Title.setText(book.name);
-            FieldName.setText(book.name);
-            FieldAuthor.setText(book.author);
-            FieldDescription.setText(book.description);
-            loadOneTag(book.tag);
+            Member member = MemberStore.get(db, dni);
+            currentMember = member;
+            Title.setText(member.name);
+            FieldDni.setText(member.dni);
+            FieldName.setText(member.name);
+            FieldSurname.setText(member.surname);
         } catch (Exception ex) {
             System.out.println(ex);
         }
-    }
-    
-    private void loadOneTag(String tag) {
-        String[] arr = {tag};
-        FieldTag.setModel(new DefaultComboBoxModel(arr));
-    }
-    
-    private void loadAllTags() {
-        ArrayList<String> tags = TagStore.getAll(db);
-        FieldTag.setModel(new DefaultComboBoxModel(tags.toArray()));
-        FieldTag.setSelectedItem(currentBook.tag);
     }
     
     void editingLogic() {
         if (isEditable == false) {
             isEditable = true;
             ButtonEdit.setText("Confirmar");
-            loadAllTags();
         } else {
             isEditable = false;
 
+            String newDni = FieldDni.getText();
             String newName = FieldName.getText();
-            String newAuthor = FieldAuthor.getText();
-            String newDescription = FieldDescription.getText();
-            String newTag = FieldTag.getSelectedItem().toString();
+            String newSurname = FieldSurname.getText();
             
-            System.out.println(newTag);
-
-            String query = "UPDATE libro SET nombre = ?, autor = ?, descripcion = ?, genero = ? WHERE id = ?";
+            String query = "UPDATE socio SET nombre = ?, apellido = ? WHERE dni = ?";
 
             try {
                 db.open();
                 
                 PreparedStatement statement = db.connection.prepareStatement(query);
                 statement.setString(1, newName);
-                statement.setString(2, newAuthor);
-                statement.setString(3, newDescription);
-                statement.setString(4, newTag);
-                statement.setInt(5, id);
+                statement.setString(2, newSurname);
+                statement.setString(3, newDni);
 
                 statement.execute();
-                JOptionPane.showMessageDialog(null, "Libro editado correctamente.");
+                JOptionPane.showMessageDialog(null, "Socio editado correctamente.");
                 Title.setText(newName);
                 db.close();
             } catch (SQLException ex) {
                 System.out.println(ex);
             }
             ButtonEdit.setText("Editar");
-            loadOneTag(newTag);
         }
         FieldName.setEditable(isEditable);
-        FieldAuthor.setEditable(isEditable);
-        FieldDescription.setEditable(isEditable);
+        FieldSurname.setEditable(isEditable);
     }
 
     /**
@@ -108,19 +83,20 @@ public class MemberDetailsForm extends javax.swing.JFrame {
 
         jScrollPane2 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList<>();
+        Header = new javax.swing.JPanel();
         Title = new javax.swing.JLabel();
-        FieldName = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
-        FieldAuthor = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
-        ButtonEdit = new javax.swing.JButton();
         GoBackButton = new javax.swing.JButton();
-        DescriptionLabel = new javax.swing.JLabel();
+        FieldsContainer = new javax.swing.JPanel();
+        Fields = new javax.swing.JPanel();
+        jLabel4 = new javax.swing.JLabel();
+        FieldDni = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        FieldName = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        FieldSurname = new javax.swing.JTextField();
+        Buttons = new javax.swing.JPanel();
+        ButtonEdit = new javax.swing.JButton();
         ButtonDelete = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        FieldDescription = new javax.swing.JTextArea();
-        DescriptionLabel1 = new javax.swing.JLabel();
-        FieldTag = new javax.swing.JComboBox<>();
 
         jList1.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
@@ -132,42 +108,14 @@ public class MemberDetailsForm extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Añadir nuevo libro");
         setSize(new java.awt.Dimension(376, 131));
+        getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.PAGE_AXIS));
 
-        Title.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        Title.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
         Title.setForeground(new java.awt.Color(8, 8, 8));
         Title.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        Title.setText("Título del libro");
+        Title.setText("Nombre del socio");
 
-        FieldName.setEditable(false);
-        FieldName.setBackground(new java.awt.Color(255, 255, 255));
-        FieldName.setForeground(new java.awt.Color(8, 8, 8));
-        FieldName.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                FieldNameKeyPressed(evt);
-            }
-        });
-
-        jLabel1.setText("Nombre");
-
-        FieldAuthor.setEditable(false);
-        FieldAuthor.setBackground(new java.awt.Color(255, 255, 255));
-        FieldAuthor.setForeground(new java.awt.Color(8, 8, 8));
-        FieldAuthor.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                FieldAuthorKeyPressed(evt);
-            }
-        });
-
-        jLabel2.setText("Autor");
-
-        ButtonEdit.setForeground(new java.awt.Color(8, 8, 8));
-        ButtonEdit.setText("Editar");
-        ButtonEdit.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                ButtonEditMouseClicked(evt);
-            }
-        });
-
+        GoBackButton.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         GoBackButton.setText("Volver");
         GoBackButton.setPreferredSize(new java.awt.Dimension(72, 32));
         GoBackButton.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -176,9 +124,95 @@ public class MemberDetailsForm extends javax.swing.JFrame {
             }
         });
 
-        DescriptionLabel.setText("Descripción");
+        javax.swing.GroupLayout HeaderLayout = new javax.swing.GroupLayout(Header);
+        Header.setLayout(HeaderLayout);
+        HeaderLayout.setHorizontalGroup(
+            HeaderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(HeaderLayout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addComponent(Title)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 192, Short.MAX_VALUE)
+                .addComponent(GoBackButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(24, 24, 24))
+        );
+        HeaderLayout.setVerticalGroup(
+            HeaderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(HeaderLayout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addGroup(HeaderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Title, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(GoBackButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(24, 24, 24))
+        );
+
+        getContentPane().add(Header);
+
+        Fields.setLayout(new java.awt.GridLayout(6, 2));
+
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jLabel4.setText("DNI");
+        Fields.add(jLabel4);
+
+        FieldDni.setEditable(false);
+        FieldDni.setBackground(new java.awt.Color(255, 255, 255));
+        FieldDni.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        FieldDni.setPreferredSize(new java.awt.Dimension(64, 32));
+        Fields.add(FieldDni);
+
+        jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jLabel6.setText("Nombre");
+        Fields.add(jLabel6);
+
+        FieldName.setEditable(false);
+        FieldName.setBackground(new java.awt.Color(255, 255, 255));
+        FieldName.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        FieldName.setPreferredSize(new java.awt.Dimension(64, 32));
+        Fields.add(FieldName);
+
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jLabel5.setText("Apellido");
+        Fields.add(jLabel5);
+
+        FieldSurname.setEditable(false);
+        FieldSurname.setBackground(new java.awt.Color(255, 255, 255));
+        FieldSurname.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        FieldSurname.setPreferredSize(new java.awt.Dimension(64, 32));
+        Fields.add(FieldSurname);
+
+        javax.swing.GroupLayout FieldsContainerLayout = new javax.swing.GroupLayout(FieldsContainer);
+        FieldsContainer.setLayout(FieldsContainerLayout);
+        FieldsContainerLayout.setHorizontalGroup(
+            FieldsContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 479, Short.MAX_VALUE)
+            .addGroup(FieldsContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(FieldsContainerLayout.createSequentialGroup()
+                    .addGap(24, 24, 24)
+                    .addComponent(Fields, javax.swing.GroupLayout.PREFERRED_SIZE, 431, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(24, 24, 24)))
+        );
+        FieldsContainerLayout.setVerticalGroup(
+            FieldsContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 207, Short.MAX_VALUE)
+            .addGroup(FieldsContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(FieldsContainerLayout.createSequentialGroup()
+                    .addGap(0, 0, 0)
+                    .addComponent(Fields, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, 0)))
+        );
+
+        getContentPane().add(FieldsContainer);
+
+        ButtonEdit.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        ButtonEdit.setForeground(new java.awt.Color(8, 8, 8));
+        ButtonEdit.setText("Editar");
+        ButtonEdit.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                ButtonEditMouseClicked(evt);
+            }
+        });
 
         ButtonDelete.setBackground(new java.awt.Color(204, 0, 0));
+        ButtonDelete.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         ButtonDelete.setForeground(new java.awt.Color(255, 255, 255));
         ButtonDelete.setText("Eliminar");
         ButtonDelete.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -187,107 +221,50 @@ public class MemberDetailsForm extends javax.swing.JFrame {
             }
         });
 
-        FieldDescription.setEditable(false);
-        FieldDescription.setBackground(new java.awt.Color(255, 255, 255));
-        FieldDescription.setColumns(20);
-        FieldDescription.setLineWrap(true);
-        FieldDescription.setRows(5);
-        jScrollPane1.setViewportView(FieldDescription);
-
-        DescriptionLabel1.setText("Género");
-
-        FieldTag.setEditable(true);
-        FieldTag.setMaximumRowCount(50);
-        FieldTag.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        FieldTag.setAutoscrolls(true);
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(24, 24, 24)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(FieldTag, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(Title, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(FieldName, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE))
-                            .addComponent(jLabel1)
-                            .addComponent(DescriptionLabel))
-                        .addGap(24, 24, 24)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(FieldAuthor, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(GoBackButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(DescriptionLabel1)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(ButtonEdit)))
-                        .addGap(16, 16, 16)
-                        .addComponent(ButtonDelete)))
+        javax.swing.GroupLayout ButtonsLayout = new javax.swing.GroupLayout(Buttons);
+        Buttons.setLayout(ButtonsLayout);
+        ButtonsLayout.setHorizontalGroup(
+            ButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ButtonsLayout.createSequentialGroup()
+                .addContainerGap(281, Short.MAX_VALUE)
+                .addComponent(ButtonEdit)
+                .addGap(16, 16, 16)
+                .addComponent(ButtonDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(24, 24, 24))
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(24, 24, 24)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(Title)
-                    .addComponent(GoBackButton, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(24, 24, 24)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2))
-                .addGap(4, 4, 4)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(FieldName, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(FieldAuthor, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(16, 16, 16)
-                .addComponent(DescriptionLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(16, 16, 16)
-                .addComponent(DescriptionLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(FieldTag, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+        ButtonsLayout.setVerticalGroup(
+            ButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(ButtonsLayout.createSequentialGroup()
+                .addGroup(ButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(ButtonEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(ButtonDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(24, 24, 24))
         );
 
+        getContentPane().add(Buttons);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    void returnToBooksList() {
+    void returnToMembersList() {
         this.dispose();
         new MembersListForm().setVisible(true);
     }
 
     private void GoBackButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_GoBackButtonMouseClicked
-        returnToBooksList();
+        returnToMembersList();
     }//GEN-LAST:event_GoBackButtonMouseClicked
 
     private void ButtonDeleteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ButtonDeleteMouseClicked
-        int isSure = JOptionPane.showConfirmDialog(null, "¿Estás seguro de borrar el libro?", "Borrar el libro", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+        int isSure = JOptionPane.showConfirmDialog(null, "¿Estás seguro de borrar el socio?", "Borrar el libro", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
         if (isSure == JOptionPane.NO_OPTION) {
             return;
         }
 
         try {
-            BookStore.delete(db, id);
-            JOptionPane.showMessageDialog(null, "Libro eliminado correctamente.");
-            returnToBooksList();
+            MemberStore.delete(db, dni);
+            JOptionPane.showMessageDialog(null, "Socio eliminado correctamente.");
+            returnToMembersList();
         } catch (HeadlessException ex) {
             System.out.println(ex);
         }
@@ -297,18 +274,6 @@ public class MemberDetailsForm extends javax.swing.JFrame {
     private void ButtonEditMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ButtonEditMouseClicked
         editingLogic();
     }//GEN-LAST:event_ButtonEditMouseClicked
-
-    private void FieldNameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_FieldNameKeyPressed
-        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER && isEditable == true) {
-            editingLogic();
-        }
-    }//GEN-LAST:event_FieldNameKeyPressed
-
-    private void FieldAuthorKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_FieldAuthorKeyPressed
-        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER && isEditable == true) {
-            editingLogic();
-        }
-    }//GEN-LAST:event_FieldAuthorKeyPressed
 
     /**
      * @param args the command line arguments
@@ -404,7 +369,7 @@ public class MemberDetailsForm extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new MemberDetailsForm(26).setVisible(true);
+                new MemberDetailsForm("47155476").setVisible(true);
             }
         });
     }
@@ -412,18 +377,19 @@ public class MemberDetailsForm extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ButtonDelete;
     private javax.swing.JButton ButtonEdit;
-    private javax.swing.JLabel DescriptionLabel;
-    private javax.swing.JLabel DescriptionLabel1;
-    private javax.swing.JTextField FieldAuthor;
-    private javax.swing.JTextArea FieldDescription;
+    private javax.swing.JPanel Buttons;
+    private javax.swing.JTextField FieldDni;
     private javax.swing.JTextField FieldName;
-    private javax.swing.JComboBox<String> FieldTag;
+    private javax.swing.JTextField FieldSurname;
+    private javax.swing.JPanel Fields;
+    private javax.swing.JPanel FieldsContainer;
     private javax.swing.JButton GoBackButton;
+    private javax.swing.JPanel Header;
     private javax.swing.JLabel Title;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JList<String> jList1;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     // End of variables declaration//GEN-END:variables
 }

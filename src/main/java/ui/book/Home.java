@@ -23,11 +23,12 @@ public class Home extends javax.swing.JFrame {
         Title1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Biblioteca");
+        setTitle("Biblioteca E.E.S.T. N°1");
         setBackground(javax.swing.UIManager.getDefaults().getColor("Table.dropCellForeground"));
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         setForeground(java.awt.Color.cyan);
+        setResizable(false);
 
         Title.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
         Title.setForeground(new java.awt.Color(8, 8, 8));
@@ -35,7 +36,7 @@ public class Home extends javax.swing.JFrame {
         Title.setText("Biblioteca");
 
         OpenBooksButton.setBackground(new java.awt.Color(76, 0, 0));
-        OpenBooksButton.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        OpenBooksButton.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
         OpenBooksButton.setForeground(new java.awt.Color(255, 255, 255));
         OpenBooksButton.setText("Ver libros");
         OpenBooksButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
@@ -49,7 +50,7 @@ public class Home extends javax.swing.JFrame {
         });
 
         OpenMembersButton.setBackground(new java.awt.Color(76, 0, 0));
-        OpenMembersButton.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        OpenMembersButton.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
         OpenMembersButton.setForeground(new java.awt.Color(255, 255, 255));
         OpenMembersButton.setText("Ver socios");
         OpenMembersButton.setMargin(new java.awt.Insets(0, 0, 0, 0));
@@ -71,13 +72,13 @@ public class Home extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(Title, javax.swing.GroupLayout.DEFAULT_SIZE, 239, Short.MAX_VALUE)
+            .addComponent(Title, javax.swing.GroupLayout.DEFAULT_SIZE, 268, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(Title1, javax.swing.GroupLayout.DEFAULT_SIZE, 227, Short.MAX_VALUE)
+                .addComponent(Title1, javax.swing.GroupLayout.DEFAULT_SIZE, 256, Short.MAX_VALUE)
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
-                .addGap(55, 55, 55)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(OpenMembersButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(OpenBooksButton, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -91,10 +92,10 @@ public class Home extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(Title1)
                 .addGap(24, 24, 24)
-                .addComponent(OpenBooksButton, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(OpenBooksButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(OpenMembersButton, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(24, Short.MAX_VALUE))
+                .addComponent(OpenMembersButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(29, Short.MAX_VALUE))
         );
 
         pack();

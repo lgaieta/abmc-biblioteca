@@ -197,13 +197,15 @@ public class MembersListForm extends javax.swing.JFrame {
     }//GEN-LAST:event_NewMemberButtonMouseClicked
 
     void searchMembers() {
-        String name = SearchTextField.getText();
+        String inputText = SearchTextField.getText();
 
-        String query = "SELECT * FROM socio WHERE nombre LIKE ?";
+        String query = "SELECT * FROM socio WHERE dni LIKE ? OR nombre LIKE ? OR apellido LIKE ?";
 
         try {
             PreparedStatement statement = db.connection.prepareStatement(query);
-            statement.setString(1, "%" + name + "%");
+            statement.setString(1, "%" + inputText + "%");
+            statement.setString(2, "%" + inputText + "%");
+            statement.setString(3, "%" + inputText + "%");
 
             System.out.println(statement);
 
@@ -233,8 +235,8 @@ public class MembersListForm extends javax.swing.JFrame {
     }//GEN-LAST:event_BackButtonMouseClicked
 
     private void MembersTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_MembersTableMouseClicked
-        int selectedId = (int) MembersTable.getModel().getValueAt(MembersTable.getSelectedRow(), 0);
-        new MemberDetailsForm(selectedId).setVisible(true);
+        String selectedDni = (String) MembersTable.getModel().getValueAt(MembersTable.getSelectedRow(), 0);
+        new MemberDetailsForm(selectedDni).setVisible(true);
         this.dispose();
     }//GEN-LAST:event_MembersTableMouseClicked
 
